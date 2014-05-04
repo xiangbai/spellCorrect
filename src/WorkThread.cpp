@@ -5,6 +5,7 @@
  *      Author: wang
  */
 #include <iostream>
+#include <fstream>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -18,43 +19,27 @@ void WorkThread::run(){
 	while(true)
 	{
 		Task task ;
-		bool ret = _p_thread_pool->get_task_queue(task) ;
+		bool ret = _p_thread_pool->get_task_queue(task) ;  //获取查询词
 		if(ret == false)
+		{
 			return ;
-		std::cout<<"get task : "<< task.req_buf << " deal with  " ;
-		int result = compute_task(task.req_buf) ;
-		sendto(m_socket_fd, &result, sizeof(float), 0,(struct sockaddr *)&(task.m_clinet_addr) , sizeof(task.m_clinet_addr)) ;
+		}
+		else
+		{
+			std::cout<<"get task : "<< task.req_buf << " deal with  " ;
+			work_task(task) ;  //任务执行查询
+		}
 	}
 	std::cout<<"end working"<<std::endl;
 }
-int WorkThread::compute_task(std::string buf){
-	char op ;
-	int operate1;
-	int operate2 ;
-	int result = 0;
+void WorkThread::work_task(Task &task){
 
-	sscanf(buf.c_str() , "%d%c%d",&operate1 , &op , &operate2) ;
-	switch(op)
-	{
-	case '+' :
-		result = operate1 + operate2 ;
-		break;
-	case '-' :
-		result = operate1 - operate2 ;
-		break;
-	case '*' :
-		result = operate1 * operate2 ;
-		break;
-	case '/' :
-		if(operate2==0)
-		{
-			throw std::runtime_error("divide cannot be zero");
-		}
-		result = operate1 / operate2 ;
-		break;
-	}
-	return result ;
+	std::ifstream fin;
+	std::string line ;
+	std::string word ;
+	sendto(m_socket_fd, task.req_buf.c_str(), sizeof(float), 0,(struct sockaddr *)&(task.m_clinet_addr) , sizeof(task.m_clinet_addr)) ;
 }
+
 void WorkThread::register_thread_pool(ThreadPool *p_thread_pool){
 		_p_thread_pool = p_thread_pool ;
 }

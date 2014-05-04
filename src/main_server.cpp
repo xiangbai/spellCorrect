@@ -5,28 +5,36 @@
 #include <syslog.h>
 #include "Server.h"
 #include "ThreadPool.h"
-
-int main(int argc , char **argv)
+#include "Conf.h"
+//守护进程
+void Daemon()
 {
-	std::ofstream fout("../log/log.dat");
-	/****************守护进程begin***************/
-	int i= 0 ;
-	if(fork() > 0)
+	int i=3;
+	if(fork()!= 0)
 	{
-		std::cout<<"fork failed"<<std::endl;
 		exit(0);
 	}
 	setsid();
 	chdir("/");
 	umask(0);
-	for(; i < MAXFD; ++i)
+	for(; i< MAXFD; ++i)
 	{
-		close(i);
+		 close(i);
 	}
+}
+int main(int argc , char **argv)
+{
+	/****************守护进程begin***************/
+	Daemon();
 	/****************守护进程end***************/
-	std::ifstream fin(argv[1]);  //read configure file
+/*	std::ifstream fin(argv[1]);  //read configure file，这个文件的目录必须是绝对路径
     std::string ip, port ;
-    fin>>ip>>port;
+    fin>>ip>>port;*/
+
+    Conf conf("server");
+	std::string ip, port;
+	ip = conf.get_value("ServerIp");
+	port=conf.get_value("ServerPort");
 	Server server(ip , port) ;  //连接服务器，并开启服务器
 
 	//监听设置
@@ -44,7 +52,7 @@ int main(int argc , char **argv)
 	std::string recv_buf;
 	while(true)
 	{
-
+		std::cout<<"enter while"<<std::endl;
 		fd_rd_back = fd_rd;
 		select(1024, &fd_rd_back, NULL, NULL, &tm);
 		//监听到客户端发送过来的请求

@@ -18,7 +18,7 @@
 #include "Condition.h"
 #include "noncopyable.h"
 struct Task{
-	std::string req_buf;   //
+	std::string req_buf;   //查询词
 	struct sockaddr_in m_clinet_addr ;
 };
 class ThreadPool :public noncopyable{
