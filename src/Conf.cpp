@@ -34,7 +34,7 @@ Conf::Conf(std::string dir) {
 	}
 }
 
-const std::string Conf::get_value(std::string key)const
+const std::string Conf::get_value(const std::string &key)const
 {
 	std::map<std::string, std::string>::const_iterator it = m_read.find(key);
 	if(it == m_read.end())

@@ -34,10 +34,10 @@ void WorkThread::run(){
 }
 void WorkThread::work_task(Task &task){
 
-	std::ifstream fin;
-	std::string line ;
-	std::string word ;
-	sendto(m_socket_fd, task.req_buf.c_str(), sizeof(float), 0,(struct sockaddr *)&(task.m_clinet_addr) , sizeof(task.m_clinet_addr)) ;
+	//std::size_t freq = task.p_sepllingCorrect->run_query(task.req_buf);
+	//std::cout<<"frequence: "<<freq<<std::endl;
+	std::size_t freq = 100;
+	sendto(m_socket_fd, &freq, sizeof(std::size_t), 0,(struct sockaddr *)&(task.m_clinet_addr) , sizeof(task.m_clinet_addr)) ;
 }
 
 void WorkThread::register_thread_pool(ThreadPool *p_thread_pool){
