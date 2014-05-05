@@ -22,10 +22,32 @@ void Daemon()
 		 close(i);
 	}
 }
+void trim(std::string &word)  //转换大小写字母，去除标点符号
+{
+	char word_buf[128];
+		strcpy(word_buf, word.c_str());
+		int i = 0,j = 0 ;
+		while(i != word.size())
+		{
+			if(!ispunct(word[i]))  //去除标点符号
+			{
+				if(isupper(word[i]))  //大写字母转换成小写字母
+				{
+					word_buf[j++] = tolower(word[i]);
+				}
+				else
+				{
+					word_buf[j++] = word[i] ;
+				}
+			}
+			i++;
+		}
+		word = word_buf;
+}
 int main(int argc , char **argv)
 {
 	/****************守护进程begin***************/
-	Daemon();
+	//Daemon();
 	/****************守护进程end***************/
 /*	std::ifstream fin(argv[1]);  //read configure file，这个文件的目录必须是绝对路径
     std::string ip, port ;
@@ -60,6 +82,7 @@ int main(int argc , char **argv)
 		{
 			Task task ;
 			server.recv_message((void *)recv_buf.c_str() , 1024);   //接收客户端发送过来的任务消息
+			trim(recv_buf);   //处理受到的字符
 			task.m_clinet_addr=server.get_client_addr();   //获取客户端的ip地址和port号
 			task.req_buf = recv_buf ;   //客户端发送过来的命令请求
 			p.add_task_queue(task) ;   //线程池将任务添加到线程池中，有工作线程来执行任务
