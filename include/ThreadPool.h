@@ -17,9 +17,11 @@
 #include "MutexLock.h"
 #include "Condition.h"
 #include "noncopyable.h"
+#include "SpellingCorrect.h"
 struct Task{
 	std::string req_buf;   //查询词
 	struct sockaddr_in m_clinet_addr ;
+	SpellingCorrect *p_sepllingCorrect ;
 };
 class ThreadPool :public noncopyable{
 public:

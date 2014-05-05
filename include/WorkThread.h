@@ -18,6 +18,7 @@
 #include "Thread.h"
 
 class ThreadPool ;
+class Task ;
 class WorkThread :public Thread{
 public:
 	WorkThread();
