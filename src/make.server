@@ -1,2 +1,2 @@
-server:MutexLock.cpp Condition.cpp Thread.cpp WorkThread.cpp ThreadPool.cpp Server.cpp Conf.cpp main_server.cpp 
-	g++ -g -o server MutexLock.cpp Condition.cpp Thread.cpp WorkThread.cpp ThreadPool.cpp Server.cpp Conf.cpp main_server.cpp -lpthread -I../include
+server:MutexLock.cpp Condition.cpp Thread.cpp WorkThread.cpp ThreadPool.cpp Server.cpp Conf.cpp main_server.cpp Task.cpp Query.cpp Dictionary.cpp StringUtil.cpp 
+	g++ -g -o server MutexLock.cpp Condition.cpp Thread.cpp WorkThread.cpp ThreadPool.cpp Server.cpp Conf.cpp main_server.cpp Task.cpp Query.cpp Dictionary.cpp StringUtil.cpp  -lpthread -I../include
