@@ -1,2 +1,0 @@
-client:Client.cpp test_client.cpp 
-	g++ -g -o client Client.cpp test_client.cpp -I../include
