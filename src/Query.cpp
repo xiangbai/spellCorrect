@@ -39,3 +39,20 @@ const std::size_t Query::get_edit_dis() const
 {
 	return _Edit_dis ;
 }
+//比较规则
+
+static bool compare (const Query &lhs,const Query &ths){
+		if(lhs.get_edit_dis() != ths.get_edit_dis())
+		{
+			return lhs.get_edit_dis() < ths.get_edit_dis()  ;  //编辑距离从小到大排序
+		}
+		else
+		{
+			return lhs.get_count() > ths.get_count() ;   //词频从大到小排序
+		}
+}
+//实现查询词的排序
+void Query::sort_query(std::vector<Query> &query)
+{
+	std::sort(query.begin(), query.end(), compare);
+}
