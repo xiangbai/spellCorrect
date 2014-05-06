@@ -14,9 +14,10 @@
 #include <stdexcept>
 #include <string>
 #include <map>
-#define FILEDIR "/var/www/spellCorrect/conf/server.conf"
+#define FILEDIR "/var/www/spellCorrect/conf/server.conf"    //读取服务器的配置文件
 #define WORDDIR "/var/www/spellCorrect/conf/thesaurus.conf"
 #define STOPDIR "/var/www/spellCorrect/conf/stop_word.conf"
+#define DICTIONDIR "/var/www/spellCorrect/conf/dictionary.conf"
 class Conf {
 public:
 	Conf(std::string dir);

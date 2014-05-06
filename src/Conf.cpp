@@ -21,14 +21,17 @@ Conf::Conf(std::string dir) {
 	{
 		s_filename = STOPDIR;
 	}
-	std::cout<<"filename: "<<s_filename<<std::endl;
+	else if(dir == "dictionary")
+	{
+		s_filename = DICTIONDIR ;  //字典文件的路径
+	}
 	std::ifstream fin(s_filename.c_str());
 	if(!fin)
 	{
 		throw std::runtime_error("file open failed");
 	}
 	std::string key , value;
-	while(fin >> key >> value)
+	while(fin >> key >> value)   //打开配置文件，读取里面相应的文件信息
 	{
 		m_read.insert(make_pair(key, value));
 	}
