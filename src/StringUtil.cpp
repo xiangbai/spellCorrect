@@ -72,7 +72,8 @@ void StringUtil::upperTolower(std::string &word)
 					word_buf[j++] = word[i] ;
 				}
 			}
-			i++;
+			++i;
 		}
+		word_buf[j] = '\0';  //注意字符数组必须要以'\0'结尾
 		word = word_buf;
 }
