@@ -20,28 +20,7 @@ void Daemon()
 		 close(i);
 	}
 }
-void trim(std::string &word)  //转换大小写字母，去除标点符号
-{
-	char word_buf[128];
-		strcpy(word_buf, word.c_str());
-		int i = 0,j = 0 ;
-		while(i != word.size())
-		{
-			if(!ispunct(word[i]))  //去除标点符号
-			{
-				if(isupper(word[i]))  //大写字母转换成小写字母
-				{
-					word_buf[j++] = tolower(word[i]);
-				}
-				else
-				{
-					word_buf[j++] = word[i] ;
-				}
-			}
-			i++;
-		}
-		word = word_buf;
-}
+
 int main(int argc , char **argv)
 {
 	/****************守护进程begin***************/

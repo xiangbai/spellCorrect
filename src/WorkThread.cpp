@@ -41,15 +41,22 @@ void WorkThread::work_task(Task &task){
 
 	std::cout<<" search word is "<<task.req_buf<<std::endl;
 
+	std::vector<std::string> vec_result ;
+	vec_result = task.run_query(task.req_buf, p_dictionary->get_map()) ;
 
-	std::string result = task.run_query(task.req_buf, p_dictionary->get_map()) ;
+	std::vector<std::string>::iterator iter = vec_result.begin();
+	while(iter != vec_result.end())
+	{
+		std::cout<<"word is "<<*iter<<std::endl;
 
-	std::cout<<"the result is "<<result <<std::endl;
+		std::size_t len = sendto(m_socket_fd, (*iter).c_str(), (*iter).size(), 0,(struct sockaddr *)&(task.m_clinet_addr) , sizeof(task.m_clinet_addr)) ;
+		++iter;
+		std::cout<<"send len is "<<len<<std::endl;
+	}
 
 	//返回纠错信息给客户端
-	std::size_t send_len= sendto(m_socket_fd, result.c_str(), result.size(), 0,(struct sockaddr *)&(task.m_clinet_addr) , sizeof(task.m_clinet_addr)) ;
 
-	std::cout<<"send length is "<<send_len<<std::endl;
+
 }
 
 void WorkThread::register_thread_pool(ThreadPool *p_thread_pool){

@@ -15,7 +15,10 @@ Dictionary *Dictionary::get_instance()
 	if(_p_dictionary == NULL)
 	{
 		_lock.lock();
-		_p_dictionary = new Dictionary;
+		if(_p_dictionary == NULL)
+		{
+			_p_dictionary = new Dictionary;
+		}
 		_lock.unlock();
 	}
 	return _p_dictionary ;
