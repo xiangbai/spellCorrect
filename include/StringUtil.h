@@ -12,14 +12,23 @@
 #include <string>
 #include <string.h>
 #include <ctype.h>
+#include <stdint.h>
+#include <vector>
+#include "EncodingConverter.h"
 class StringUtil {
 public:
 	StringUtil();
 	virtual ~StringUtil();
-	std::size_t edit_distance(const std::string &str1, const std::string &str2); //计算两个字符的最小编辑距离
 	void upperTolower(std::string & word); //将大写转换成小写
-//	void ignore_punct(std::string &word);  //忽略标点符号
+
+	std::size_t edit_distance(std::string &str1, std::string &str2); //计算两个字符的最小编辑距离
+
 private:
+
+	void toUint16_t(std::string &str, std::vector<uint16_t> &uint_t);   //将字符串转换存储到uint16_t数组中
+
+	std::size_t edit(const std::vector<uint16_t> &str1, const std::vector<uint16_t> &str2);  //通用类型的计算最短编辑距离
+
 	int min(int a, int b)
 	{
 		return a < b ? a : b ;
