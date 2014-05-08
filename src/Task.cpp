@@ -12,7 +12,7 @@ Task::Task() {
 
 }
 //进行搜索查询
-const std::string Task::run_query(const std::string &search, const std::map<std::string, std::size_t> &map_dic)const
+std::vector<std::string> Task::run_query(const std::string &search, const std::map<std::string, std::size_t> &map_dic)
 {
 	std::vector<Query> query_vec ;  //查询集合数组
 
@@ -33,30 +33,25 @@ const std::string Task::run_query(const std::string &search, const std::map<std:
 		query.set_edit_dis(string_util.edit_distance(search, map_it->first)) ;  //计算编辑距离
 
 
-
 		if(query.get_edit_dis() < 3)
 		{
 			query_vec.push_back(query);
 		}
 		++map_it ;
 	}
-	//这种情况是返回了所有的查询结果，是无序情况
-	for(std::vector<Query>::iterator iter = query_vec.begin() ; iter != query_vec.end() ; ++iter)
-	{
-		std::cout<<"word: "<<iter->get_word()<<"  frequency: "<<iter->get_count()<<"  edit distance: "<<iter->get_edit_dis()<<std::endl;
-	}
 
 	//排序规则
 	Query query ;
-	query.sort_query(query_vec);
+	query.sort_query(query_vec);  //按照编辑距离从小到大排序
 
-	std::cout<<std::endl<<std::endl<<"after sort: "<<std::endl;
-
-	for(std::vector<Query>::iterator iter = query_vec.begin() ; iter != query_vec.end() ; ++iter)
+	std::vector<std::string> vec_query;
+	for(std::vector<Query>::iterator iter = query_vec.begin(); iter != query_vec.end(); ++iter)
 	{
-		std::cout<<"word: "<<iter->get_word()<<"   frequency: "<<iter->get_count()<<"  edit distance: "<<iter->get_edit_dis()<<std::endl;
+		std::cout<<"get_word is "<<iter->get_word()<<std::endl;
+		vec_query.push_back(iter->get_word());
 	}
-	return query_vec[0].get_word();
+
+	return vec_query;  //返回编辑距离最小，且频率最大的相近词
 }
 Task::~Task() {
 	// TODO Auto-generated destructor stub
