@@ -7,7 +7,6 @@
 
 #include "Server.h"
 #include "ThreadPool.h"
-#include "StringUtil.h"
 
 Server::Server(const std::string &ip , const std::string &port, const std::string &dictionary):_socket_fd(0) {
 	// TODO Auto-generated constructor stub
@@ -37,7 +36,6 @@ Server::Server(const std::string &ip , const std::string &port, const std::strin
 //服务器开始监听客户端发送过来的消息
 void Server::start(ThreadPool *p)
 {
-	StringUtil string_util ;
 	//监听设置
 	fd_set fd_rd, fd_rd_back;
 	struct timeval tm;
@@ -49,6 +47,9 @@ void Server::start(ThreadPool *p)
 	std::string recv ;
 	char recv_buf[1024];
 
+	/*
+	 * 服务器只管接收客户端发送过来的任务请求，并把该任务放入到任务队列中，其它事情一概不管
+	 */
 	while(true)
 	{
 		memset(recv_buf, 0, 1024);
@@ -59,11 +60,7 @@ void Server::start(ThreadPool *p)
 		{
 			Task task ;
 			this->recv_message((void *)recv_buf , sizeof(recv_buf));   //接收客户端发送过来的任务消息
-			//trim(recv_buf);   //处理受到的字符
-			recv = recv_buf;
-			string_util.upperTolower(recv);
-			std::cout<<"recv informa : "<<recv<<std::endl;
-
+			recv = recv_buf;   //接收客户端发送的字符
 			task.m_clinet_addr=m_client_addr;   //获取客户端的ip地址和port号
 			task.req_buf = recv ;   //客户端发送过来的命令请求
 

@@ -26,11 +26,13 @@ void StringUtil::toUint16_t(std::string &str, std::vector<uint16_t> &uint_t)  //
 			unsigned char str_= (unsigned char)str[i] ;
 
 			unsigned char str_add = (unsigned char)str[++i] ;
-			uint_t.push_back(str_<< 8 | str_add) ;
+
+			uint16_t temp = str_<< 8 | str_add ;
+			uint_t.push_back(temp) ;
 		}
 		else  //结果小于128， 表示为ASCII
 		{
-			uint_t.push_back((unsigned char) str[i]) ;
+			uint_t.push_back((uint16_t)(unsigned char) str[i]) ;
 
 		}
 	}
@@ -120,8 +122,11 @@ std::size_t StringUtil::edit(const std::vector<uint16_t> &str1, const std::vecto
 		}
 	}
 	int result = d[m][n] ;
-
-
+	for(int i = 0; i <= m; ++i)
+	{
+		delete [] d[i];
+	}
+	delete [] d ;
 	return result ;
 }
 
