@@ -27,7 +27,7 @@ void WorkThread::run(){
 		}
 		else
 		{
-			std::cout<<"get task : "<< task.req_buf << " deal with  " ;
+			std::cout<<"get task : "<< task.req_buf << " deal with  " <<std::endl;
 			work_task(task) ;  //任务执行查询, 完成查询池与字典词库的距离计算
 		}
 	}
@@ -41,6 +41,8 @@ void WorkThread::work_task(Task &task){
 	//在这里定义一个字典类
 	Dictionary *p_dictionary = Dictionary::get_instance(); //获取独一的一份字典
 	std::string result  = task.runing_query(task.req_buf, p_dictionary->get_map()) ; //执行搜索匹配操作
+	EncodingConverter trans ;
+	result = trans.gbkToutf8(result) ;
 	std::cout<<"runing query result is "<<result<<std::endl;
 
 	//返回纠错信息给客户端

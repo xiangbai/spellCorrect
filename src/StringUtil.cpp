@@ -44,15 +44,17 @@ void StringUtil::toUint16_t(std::string &str, std::vector<uint16_t> &uint_t)  //
 }
 
 //外部调用计算最短编辑距离算法
-std::size_t StringUtil::edit_distance(std::string &str1, std::string &str2)
+std::size_t StringUtil::edit_distance(const std::string &str1, const std::string &str2)
 {
 	std::vector<uint16_t> u_str1,u_str2 ;
+	std::string temp_str1 = str1 ;
+	std::string temp_str2 = str2 ;
 	EncodingConverter trans ;
-	str1 = trans.utf8Togbk(str1) ;  //编码转换，将读进来的UTF-8转换成GBK格式处理
-	str2 = trans.utf8Togbk(str2) ;
+	temp_str1 = trans.utf8Togbk(temp_str1) ;  //编码转换，将读进来的UTF-8转换成GBK格式处理
+	temp_str2 = trans.utf8Togbk(temp_str2) ;
 
-	toUint16_t(str1, u_str1); //将数据存储在uint16_t的数组中
-	toUint16_t(str2, u_str2);
+	toUint16_t(temp_str1, u_str1); //将数据存储在uint16_t的数组中
+	toUint16_t(temp_str2, u_str2);
 
 	return edit(u_str1, u_str2);
 }
@@ -153,17 +155,16 @@ void StringUtil::upperTolower(std::string &word)
 		word_buf[j] = '\0';  //注意字符数组必须要以'\0'结尾
 		word = word_buf;
 }
-/*
-int main(int argc, char **argv)
+
+/*int main(int argc, char **argv)
 {
 	StringUtil string_util ;
-	std::string str1("你好");
-	std::string str2("你好呀");
+	std::string str1("鸡汤");
+	std::string str2("o");
 
 	std::string str3("ok");
 	std::string str4("okd");
 	std::size_t edit = string_util.edit_distance(str1, str2) ;
 	std::cout<<edit<<std::endl;
 	return 0 ;
-}
-*/
+}*/
