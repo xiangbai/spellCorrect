@@ -23,7 +23,7 @@ class Dictionary {
 public:
 	virtual ~Dictionary();
 	static Dictionary *get_instance();  //定义返回该实例的一个对象指针
-	const std::map<std::string, std::size_t> get_map()const ;
+	const std::map<std::string, std::size_t> &get_map() ;
 private:
 	Dictionary()
     {
@@ -31,9 +31,8 @@ private:
 		Conf conf("dictionary");
 		std::string filename = conf.get_value("FileName") ;
 
-
 	   //创建服务器自己的词库
-		create_dictionary(filename, m_direction);
+		create_dictionary(filename, m_direction);  //保存的有自己的词库，但这只保留的是英文词库
     }
 
 	static MutexLock _lock;

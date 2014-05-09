@@ -14,6 +14,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <map>
+#include <vector>
 #include <unistd.h>
 #include "Thread.h"
 

@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include "StringUtil.h"
 #include "Query.h"
+#include "EncodingConverter.h"
 class Task {
 public:
 	Task();
@@ -25,7 +26,7 @@ public:
 	std::string req_buf;   //查询词
 	struct sockaddr_in m_clinet_addr ;  //客户端端口号
 	//在字典中查询搜索词
-	std::vector<std::string> run_query(const std::string &search, const std::map<std::string, std::size_t> &map_dic);
+	std::string runing_query(std::string &search, const std::map<std::string, std::size_t>  &map_dic);
 };
 
 #endif /* TASK_H_ */
