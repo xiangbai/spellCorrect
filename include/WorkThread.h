@@ -18,7 +18,7 @@
 #include <vector>
 #include <unistd.h>
 #include "Thread.h"
-
+#include "EncodingConverter.h"
 class ThreadPool ;
 class Task ;
 

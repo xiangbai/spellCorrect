@@ -21,7 +21,7 @@ public:
 	virtual ~StringUtil();
 	void upperTolower(std::string & word); //将大写转换成小写
 
-	std::size_t edit_distance(std::string &str1, std::string &str2); //计算两个字符的最小编辑距离
+	std::size_t edit_distance(const std::string &str1, const std::string &str2); //计算两个字符的最小编辑距离
 
 private:
 
