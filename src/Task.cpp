@@ -11,9 +11,13 @@ Task::Task() {
 	// TODO Auto-generated constructor stub
 
 }
-//进行搜索查询
-std::vector<std::string> Task::run_query(const std::string &search, const std::map<std::string, std::size_t> &map_dic)
+//进行搜索查询,这个主要用在对ASCII的搜索匹配
+std::string Task::runing_query(std::string &search, const std::map<std::string, std::size_t>  &map_dic)
 {
+
+	std::cout<<"get search: "<<search<<std::endl;
+	std::cout<<"get size "<<map_dic.size()<<std::endl;
+
 	std::vector<Query> query_vec ;  //查询集合数组
 
 	StringUtil string_util ;
@@ -30,12 +34,13 @@ std::vector<std::string> Task::run_query(const std::string &search, const std::m
 		Query query;
 		query.set_word(map_it->first);
 		query.set_count(map_it->second) ;
-		query.set_edit_dis(string_util.edit_distance(search, map_it->first)) ;  //计算编辑距离
-
+		std::string first = map_it->first;
+		query.set_edit_dis(string_util.edit_distance(search, first)) ;  //计算编辑距离
 
 		if(query.get_edit_dis() < 3)
 		{
 			query_vec.push_back(query);
+			std::cout<<query.get_word() << "  "<<query.get_count() << "  " <<query.get_edit_dis()<<std::endl;
 		}
 		++map_it ;
 	}
@@ -43,17 +48,8 @@ std::vector<std::string> Task::run_query(const std::string &search, const std::m
 	//排序规则
 	Query query ;
 	query.sort_query(query_vec);  //按照编辑距离从小到大排序
-
-	std::vector<std::string> vec_query;
-	for(std::vector<Query>::iterator iter = query_vec.begin(); iter != query_vec.end(); ++iter)
-	{
-		std::cout<<"get_word is "<<iter->get_word()<<std::endl;
-		vec_query.push_back(iter->get_word());
-	}
-
-	return vec_query;  //返回编辑距离最小，且频率最大的相近词
+	return query_vec[0].get_word() ;
 }
 Task::~Task() {
 	// TODO Auto-generated destructor stub
 }
-

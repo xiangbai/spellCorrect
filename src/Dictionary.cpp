@@ -46,7 +46,7 @@ void Dictionary::create_dictionary(const std::string &filename, std::map<std::st
 	}
 }
 //返回词库
-const std::map<std::string, std::size_t> Dictionary::get_map()const
+const std::map<std::string, std::size_t> &Dictionary::get_map()
 {
 	return m_direction ;
 }
