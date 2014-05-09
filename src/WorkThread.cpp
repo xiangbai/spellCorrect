@@ -40,6 +40,9 @@ void WorkThread::work_task(Task &task){
 	 */
 	//在这里定义一个字典类
 	Dictionary *p_dictionary = Dictionary::get_instance(); //获取独一的一份字典
+	/*
+	 * 最好传一个对象进去，直接去查询索引表
+	 */
 	std::string result  = task.runing_query(task.req_buf, p_dictionary->get_map()) ; //执行搜索匹配操作
 	EncodingConverter trans ;
 	result = trans.gbkToutf8(result) ;
