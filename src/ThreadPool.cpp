@@ -7,14 +7,17 @@
 
 #include "ThreadPool.h"
 #include <iostream>
+
 //once init thread pool , start the thread to work
 ThreadPool::ThreadPool(std::vector<WorkThread>::size_type max_thread)
 :_task_queue() , _max_thread(max_thread),  _thread_vector(_max_thread) ,
- _is_started(false) , _lock() , _cond(&_lock){
+ _is_started(false) , _lock() , _cond(&_lock), cache_thread(){
 	// TODO Auto-generated constructor stub
 	for(std::vector<WorkThread>::iterator iter = _thread_vector.begin() ; iter != _thread_vector.end() ; ++iter)
 	{
 		iter->register_thread_pool(this) ;
+		//cache_thread(&(iter->_cachequery)) ;
+		cache_thread.add_cache(iter->get_cache_query()) ; //将相应的工作线程注册到cache线程中
 	}
 }
 
