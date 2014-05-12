@@ -19,6 +19,7 @@
 #include <vector>
 #include <stdexcept>
 #include "Conf.h"
+#include "MutexLock.h"
 /*
  * 使用cache是为了记录查询记录，将部分信息直接存储在内存中，这样就不用每次都在索引表中查找
  * 有个文件记录搜索的结果，格式如：搜索词	结果返回值
@@ -40,7 +41,7 @@ template<> struct hash<std::string> {
 class CacheQuery{
 public:
 
-	static Dictionary *get_instance();  //定义返回该实例的一个对象指针
+	CacheQuery();
 	virtual ~CacheQuery();
 	/*
 	 * 需要通过文件来存储部分信息到磁盘中，同时hash_map有更新的时候，需要将内容重新写入到磁盘中
@@ -56,7 +57,7 @@ public:
 	void replace_key_in_cache(const std::string &key, const std::string &value);  //进行替换
 	bool delete_key_in_cache(const std::string &key);   //删除不经常访问的键值对
 
-	std::string get_value_in_cache(const std::string &key)const ;  //通过键，返回值
+	std::string get_value_in_cache(const std::string &key) ;  //通过键，返回值
 	std::size_t get_size_of_hash_map()const;
 private:
 	__gnu_cxx ::hash_map<std::string, std::string, __gnu_cxx ::hash<std::string> > hash_search; //用于记录已经查询过的词的记录
@@ -64,14 +65,7 @@ private:
 	typedef __gnu_cxx ::hash_map<std::string, std::string, __gnu_cxx ::hash<std::string> >::const_iterator hash_search_iter_const ;
 	bool is_cache_update ;
 	std::string _filename ;
-	CacheQuery()
-	{
-		is_cache_update = false ;
-		Conf conf("cache");
-		_filename = conf.get_value("CacheFilename");
-	}
-	static MutexLock _lock;
-	static CacheQuery *_p_cachequery;
+	MutexLock _lock ;
 };
 
 #endif /* CACHEQUERY_H_ */

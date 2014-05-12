@@ -17,23 +17,14 @@
 /*
  * 读取内容到cache中
  */
-MutexLock CacheQuery::_lock;
-CacheQuery *CacheQuery::_p_cachequery = NULL ;
+
 /*
  * 索引建立成功，可以直接通过访问词来找到相应的词和词频
  */
-Dictionary *CacheQuery::get_instance()  //单例模式
+CacheQuery::CacheQuery():is_cache_update(false),_lock()
 {
-	if(_p_cachequery == NULL)
-	{
-		_lock.lock();
-		if(_p_cachequery == NULL)
-		{
-			_p_cachequery = new Dictionary;
-		}
-		_lock.unlock();
-	}
-	return _p_cachequery ;
+	Conf conf("cache");
+	_filename = conf.get_value("CacheFilename");
 }
 void CacheQuery::read_from_cache()
 {
@@ -42,6 +33,7 @@ void CacheQuery::read_from_cache()
 	if(!fin)
 	{
 		throw std::runtime_error("file open failed");
+		_lock.unlock() ;
 	}
 	std::string key, value ;
 	std::string line ;
@@ -64,11 +56,14 @@ void CacheQuery::write_into_cache()
 	{
 		return ;
 	}
+
+	_lock.lock() ;   //对磁盘文件进行加锁操作
 	std::ofstream fout ;
 	fout.open(_filename.c_str());
 	if(!fout)
 	{
 		throw std::runtime_error("file open failed");
+		_lock.unlock() ;
 	}
 	hash_search_iter_const iter = hash_search.begin() ;
 	while(iter != hash_search.end())  //将hash_map写入到文件中
@@ -76,6 +71,8 @@ void CacheQuery::write_into_cache()
 		fout<<iter->first<<"\t"<<iter->second <<std::endl;
 		++iter ;
 	}
+	_lock.unlock() ;
+
 	fout.close();
 	fout.clear();
 	is_cache_update = false ;
@@ -132,17 +129,21 @@ bool CacheQuery::delete_key_in_cache(const std::string &key)
 	}
 
 }
-std::string CacheQuery::get_value_in_cache(const std::string &key)const   //外部可以通过键，直接返回值
+std::string CacheQuery::get_value_in_cache(const std::string &key)   //外部可以通过键，直接返回值
 {
+	_lock.lock() ;
 	hash_search_iter_const iter = hash_search.find(key);
 	if(iter  != hash_search.end())  //在cache中找到搜索词所对应的查询结果
 	{
+		_lock.unlock();
 		return iter->second ;
 	}
 	else
 	{
+		_lock.unlock();
 		return "" ;
 	}
+
 }
 //获取hash_map的容量大小
 std::size_t CacheQuery::get_size_of_hash_map()const
