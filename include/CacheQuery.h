@@ -39,7 +39,8 @@ template<> struct hash<std::string> {
 }
 class CacheQuery{
 public:
-	CacheQuery();
+
+	static Dictionary *get_instance();  //定义返回该实例的一个对象指针
 	virtual ~CacheQuery();
 	/*
 	 * 需要通过文件来存储部分信息到磁盘中，同时hash_map有更新的时候，需要将内容重新写入到磁盘中
@@ -63,7 +64,14 @@ private:
 	typedef __gnu_cxx ::hash_map<std::string, std::string, __gnu_cxx ::hash<std::string> >::const_iterator hash_search_iter_const ;
 	bool is_cache_update ;
 	std::string _filename ;
-
+	CacheQuery()
+	{
+		is_cache_update = false ;
+		Conf conf("cache");
+		_filename = conf.get_value("CacheFilename");
+	}
+	static MutexLock _lock;
+	static CacheQuery *_p_cachequery;
 };
 
 #endif /* CACHEQUERY_H_ */

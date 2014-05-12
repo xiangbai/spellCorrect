@@ -14,17 +14,27 @@
 /*
  * 有一个问题就是我的cache线程开启要执行的任务就是要扫描磁盘，定期的更新hash_map和磁盘上面的内容
  */
-CacheQuery::CacheQuery():is_cache_update(false) {
-	// TODO Auto-generated constructor stub
-	Conf conf("cache");
-	//read_from_cache(conf.get_value("CacheFilename"));    //将文件中的内容读入到cache中
-	_filename = conf.get_value("CacheFilename");
-
-
-}
 /*
  * 读取内容到cache中
  */
+MutexLock CacheQuery::_lock;
+CacheQuery *CacheQuery::_p_cachequery = NULL ;
+/*
+ * 索引建立成功，可以直接通过访问词来找到相应的词和词频
+ */
+Dictionary *CacheQuery::get_instance()  //单例模式
+{
+	if(_p_cachequery == NULL)
+	{
+		_lock.lock();
+		if(_p_cachequery == NULL)
+		{
+			_p_cachequery = new Dictionary;
+		}
+		_lock.unlock();
+	}
+	return _p_cachequery ;
+}
 void CacheQuery::read_from_cache()
 {
 	std::ifstream fin;
@@ -144,7 +154,7 @@ std::size_t CacheQuery::get_size_of_hash_map()const
 CacheQuery::~CacheQuery() {
 	// TODO Auto-generated destructor stub
 }
-
+/*
 int main(int argc, char **argv)
 {
 	CacheQuery cache_query ;
@@ -154,3 +164,4 @@ int main(int argc, char **argv)
 	std::cout<<"before size if "<<cache_query.get_size_of_hash_map()<<std::endl;
 	return 0 ;
 }
+*/
