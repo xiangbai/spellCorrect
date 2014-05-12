@@ -1,6 +1,8 @@
 #include "Thread.h"
+#include "Dictionary.h"
 Thread::Thread():_pth(0){
 	pthread_attr_init(&_attr);
+	p_dictionary = Dictionary::get_instance() ;
 }
 Thread::~Thread() {
 	pthread_attr_destroy(&_attr);
@@ -10,6 +12,7 @@ void Thread::start()
 {
 	pthread_attr_setdetachstate(&_attr , PTHREAD_CREATE_DETACHED);
 	pthread_create(&_pth , &_attr , thread_handle , this);
+
 }
 
 void *Thread::thread_handle(void *arg)
