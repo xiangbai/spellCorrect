@@ -5,7 +5,7 @@
 #include "noncopyable.h"
 
 class Condition ;
-class MutexLock:public noncopyable{
+class MutexLock{
 	friend class Condition ;
 	private:
 		pthread_mutex_t _mutex ;

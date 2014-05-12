@@ -37,7 +37,7 @@ private:
 	std::queue<Task> _task_queue ; //task queue, 任务队列
 	std::vector<WorkThread>::size_type _max_thread ; //the number of thread， 线程的最大数目
 	std::vector<WorkThread> _thread_vector ;   // thread vector //线程数组
-
+	CacheThread cache_thread ;
 	bool _is_started ; //the signal of thread pool
 	mutable MutexLock _lock ;   // mutex
 	mutable Condition _cond ;    //cond

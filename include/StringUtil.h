@@ -26,9 +26,6 @@ public:
 	std::size_t edit_distance(const std::string &str1, const std::string &str2); //计算两个字符的最小编辑距离
 
 private:
-
-
-
 	std::size_t edit(const std::vector<uint16_t> &str1, const std::vector<uint16_t> &str2);  //通用类型的计算最短编辑距离
 
 	int min(int a, int b)

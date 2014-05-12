@@ -12,6 +12,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <set>
 #include <string.h>
 #include "MutexLock.h"
 #include "CreateDictionary.h"
@@ -29,17 +30,16 @@ public:
 
 	std::vector<std::pair<std::string, std::size_t> > _word_vec ;  //采用下表直接可以得到相应词组及其词频
 
-	std::map<uint16_t, std::set<std::size_t> > m_word ;  //词，映射到该词所在的vector数组
-	std::map<uint16_t, std::set<std::size_t> >::iterator iter ;
+	std::map<std::string, std::set<std::size_t> > m_word ;  //词，映射到该词所在的vector数组，也就是索引
 private:
 	Dictionary()
     {
 		Conf conf("dictionary");
 		std::string filename = conf.get_value("FileName") ;
-
+		_word_vec.clear();
+		m_word.clear();
 	   //创建服务器自己的词库
 		create_dictionary(filename);  //保存的有自己的词库，但这只保留的是英文词库
-		iter = m_word.begin();
     }
 
 	static MutexLock _lock;

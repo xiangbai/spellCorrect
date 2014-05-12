@@ -18,6 +18,7 @@
 #define WORDDIR "/var/www/spellCorrect/conf/thesaurus.conf"
 #define STOPDIR "/var/www/spellCorrect/conf/stop_word.conf"
 #define DICTIONDIR "/var/www/spellCorrect/conf/dictionary.conf"
+#define CACHEFILE "/var/www/spellCorrect/conf/cache.conf"
 class Conf {
 public:
 	Conf(std::string dir);
