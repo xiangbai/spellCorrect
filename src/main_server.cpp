@@ -36,7 +36,7 @@ int main(int argc , char **argv)
 	Server server(ip , port, dictionary) ;  //连接服务器，并开启服务器
 
 
-	ThreadPool p(10) ;    //创建线程池
+	ThreadPool p(4) ;    //创建线程池
 	p.start_thread_pool() ;   //启动线程，这时所有的线程都已经启动
 
 	server.start(&p);   //启动服务器开始监听客户端发送的消息

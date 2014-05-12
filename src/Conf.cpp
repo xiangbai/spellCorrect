@@ -25,6 +25,10 @@ Conf::Conf(std::string dir) {
 	{
 		s_filename = DICTIONDIR ;  //字典文件的路径
 	}
+	else if(dir == "cache")
+	{
+		s_filename = CACHEFILE;      //cache文件路径
+	}
 	std::ifstream fin(s_filename.c_str());
 	if(!fin)
 	{
