@@ -9,8 +9,10 @@
 
 MutexLock Dictionary::_lock;
 Dictionary *Dictionary::_p_dictionary = NULL ;
-
-Dictionary *Dictionary::get_instance()
+/*
+ * 索引建立成功，可以直接通过访问词来找到相应的词和词频
+ */
+Dictionary *Dictionary::get_instance()  //单例模式
 {
 	if(_p_dictionary == NULL)
 	{
@@ -27,6 +29,7 @@ Dictionary *Dictionary::get_instance()
 void Dictionary::create_dictionary(const std::string &filename)
 {
 	std::ifstream fin;
+	std::cout<<"filename is "<<filename<<std::endl;
 	fin.open(filename.c_str());
 	if(!fin)
 	{
@@ -34,58 +37,49 @@ void Dictionary::create_dictionary(const std::string &filename)
 	}
 	std::string word;
 	std::size_t count;
-	std::pair<std::string, std::size_t> word_count ;
+	std::string word_;
 	std::size_t index = 0 ;
-	std::size_t cur_index = 0 ;
-	while(fin >> word >>count)   //构成词库
+	while(fin >> word >>count>>word_)   //从字典中读出内容，构成词库
 	{
-		//统计单词的词频，去除重复词的存储
-		/*std::pair<std::map<std::string, std::size_t>::iterator, bool> ret =
-				m_direction.insert(std::make_pair(word, 1));
-		if (!ret.second)
-		{
-			++ret.first->second;
-		}*/
+		std::pair<std::string, std::size_t> word_count ;
 		word_count = make_pair(word, count);
 		_word_vec.push_back(word_count);  //得到词，词频数组
-		cur_index = index++ ;
 		std::string temp = word_count.first ;
-		create_index(temp, cur_index);  // 建立索引
+		this->create_index(temp, index++);  // 建立索引,词对应该词在vector中的小标
 	}
+	std::cout<<"_word_vec size is "<<_word_vec.size()<<std::endl;
+	fin.close();
 }
-//为每一个词建立一个索引
+
+//为每一个词建立一个索引，需要解析读出来的每一个词
 void Dictionary::create_index(std::string &word, std::size_t index)
 {
+	/*
+	 * 解析字符串中的每个词,为每个词建立索引
+	 */
 	EncodingConverter trans ;
-	StringUtil string_util ;
-	word = trans.utf8Togbk(word) ;
 	int i ;
 	unsigned char a ;
-
 	//读取每个字节
 	for(i = 0; i != word.size(); ++i)
 	{
-		a = word[i] ;
+		a =word[i] ;
 		if(a & 0x80)  //结果是等于128，表示是汉字
 		{
-			unsigned char str_= (unsigned char)word[i] ;
-			unsigned char str_add = (unsigned char)word[++i] ;
-
-			uint16_t temp = str_<< 8 | str_add ;  //只是一个字节的uint16_t的值
+			std::string str_(1, word[i]) ;
+			std::string str_add (1, word[++i]) ;
+			std::string  temp ;
+			temp = str_+ str_add ;  //只是一个字节的uint16_t的值
 			//可能会有重复词的存在
-			iter->first = temp ;
-			iter->second.insert(index) ;
-
+			//temp = trans.gbkToutf8(temp) ;  //解析出每个单词
+			m_word[temp].insert(index) ;  //使用下标的访问方式,temp采用存储GBK格式数据
 		}
 		else  //结果小于128， 表示为ASCII
 		{
-			iter->first = (uint16_t)(unsigned char) word[i] ;
-			iter->second.insert(index) ;
-
+			std::string temp(1,word[i]);
+			m_word[temp].insert(index) ;
 		}
-		++iter ;
 	}
-
 }
 //返回词库
 
@@ -94,3 +88,23 @@ Dictionary::~Dictionary() {
 	delete _p_dictionary ;
 }
 
+
+ //*测试main函数，可以成功的找到相应的词和词频
+/*
+int main(int argc, char **argv)
+{
+	Dictionary *p_dictionary = Dictionary::get_instance();
+	EncodingConverter trans ;
+	std::string temps("黑");
+	temps = trans.utf8Togbk(temps) ;
+	std::set<std::size_t> temp = p_dictionary->m_word[temps] ;
+	for(std::set<std::size_t>::iterator iter = temp.begin(); iter != temp.end(); ++iter)
+	{
+		std::cout<< *iter <<"  ";   //获取该词的下标
+		std::cout<<" "<<p_dictionary->_word_vec[*iter].first<<std::endl;
+	}
+	std::cout<<std::endl;
+	std::cout<<temp.size()<<std::endl;
+	return 0 ;
+}
+*/

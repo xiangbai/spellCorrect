@@ -29,10 +29,12 @@ void ThreadPool::start_thread_pool() {
 	{
 		//start work thread working ;
 		_is_started = true ;
+		//启动工作线程
 		for(std::vector<WorkThread>::iterator iter = _thread_vector.begin() ; iter != _thread_vector.end() ; ++iter)
 		{
 			iter->start();
 		}
+		cache_thread.start() ; // 开启cache线程工作
 	}
 }
 void ThreadPool::stop_thread_pool() {
