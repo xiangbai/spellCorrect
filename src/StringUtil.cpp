@@ -62,22 +62,8 @@ std::size_t StringUtil::edit_distance(const std::string &str1, const std::string
 //通用版本的计算最短编辑距离
 std::size_t StringUtil::edit(const std::vector<uint16_t> &str1, const std::vector<uint16_t> &str2)
 {
-
-/*	for(std::vector<uint16_t>::const_iterator iter = str1.begin(); iter != str1.end(); ++iter)
-	{
-		std::cout<<*iter<<std::endl;
-	}
-	for(std::vector<uint16_t>::const_iterator iter = str2.begin(); iter != str2.end(); ++iter)
-	{
-		std::cout<<*iter<<std::endl;
-	}
-	*/
 	std::size_t m = str1.size();
 	std::size_t n = str2.size();
-
-//	std::cout<<"m is "<<m <<std::endl;
-//	std::cout<<"n is "<<n <<std::endl;
-
 
 	int **d ;
 	d = new int*[m+1];
@@ -102,9 +88,6 @@ std::size_t StringUtil::edit(const std::vector<uint16_t> &str1, const std::vecto
 	{
 		for(j = 1 ; j <= n ; ++j)
 		{
-			//std::cout<<"str1["<<i<<"]"<<str1[i]<<std::endl;
-			//std::cout<<"str1["<<j<<"]"<<str1[j]<<std::endl;
-
 			if(str1[i-1] == str2[j-1])
 			{
 				temp = 0 ;
@@ -113,14 +96,7 @@ std::size_t StringUtil::edit(const std::vector<uint16_t> &str1, const std::vecto
 			{
 				temp = 1 ;
 			}
-		/*	std::cout<<"d["<<i-1<<"]["<<j<<"] =" << d[i-1][j]<<std::endl;
-			std::cout<<"d["<<i<<"]["<<j-1<<"] ="<<d[i][j-1]<<std::endl;
-			std::cout<<"d["<<i-1<<"]["<<j-1<<"] ="<<d[i-1][j-1]<<std::endl;
-			std::cout<<"temp = "<<temp<<std::endl;
-		 */
 			d[i][j] = min(min(d[i-1][j] + 1 , d[i][j-1] + 1) , d[i-1][j-1]+temp) ; //编辑最短距离
-
-			//std::cout<<"d["<<i<<"]["<<j<<"] ="<<d[i][j]<<std::endl;
 		}
 	}
 	int result = d[m][n] ;
