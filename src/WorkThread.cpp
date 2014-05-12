@@ -13,7 +13,7 @@
 #include "ThreadPool.h"
 #include "Dictionary.h"
 #include "Task.h"
-WorkThread::WorkThread():_p_thread_pool(NULL){
+WorkThread::WorkThread():_p_thread_pool(NULL), _cachequery(){
 	m_socket_fd = socket(AF_INET , SOCK_DGRAM , 0) ;
 }
 void WorkThread::run(){
@@ -39,15 +39,14 @@ void WorkThread::work_task(Task &task){
 	 * 获取的搜索词可能会是汉字，此时该如何去处理？
 	 */
 	//在这里定义一个字典类
-	Dictionary *p_dictionary = Dictionary::get_instance(); //获取独一的一份字典
+	//Dictionary *p_dictionary = Dictionary::get_instance(); //获取独一的一份字典
 	/*
 	 * 最好传一个对象进去，直接去查询索引表
 	 */
 	/*
-	 * 在这一步需要先查询cache缓存中的内容。
+	 * 在这一步需要先查询cache缓存中的内容。将cache查询类作为工作线程的一个成员变量，并将该引用传递给Task类中
 	 */
-
-	std::string result  = task.runing_query(task.req_buf, p_dictionary) ; //执行搜索匹配操作，返回的结果是GBK格式
+	std::string result  = task.runing_query(task.req_buf, p_dictionary, _cachequery) ; //执行搜索匹配操作，返回的结果是GBK格式
 	EncodingConverter trans ;
 
 
@@ -59,4 +58,9 @@ void WorkThread::work_task(Task &task){
 }
 void WorkThread::register_thread_pool(ThreadPool *p_thread_pool){
 		_p_thread_pool = p_thread_pool ;
+}
+
+CacheQuery *WorkThread::get_cache_query()
+{
+	return &_cachequery ;
 }
