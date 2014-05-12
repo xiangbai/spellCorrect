@@ -7,7 +7,7 @@
 
 #include "CacheThread.h"
 
-CacheThread::CacheThread(std::size_t interval):_interval(interval) {
+CacheThread::CacheThread() {
 	// TODO Auto-generated constructor stub
 
 }
@@ -15,8 +15,8 @@ void CacheThread::run()
 {
 	while(true)
 	{
-		sleep(_interval);
-		process();  //cache线程所要完车的任务
+		sleep(2);
+		process();  //cache线程所要完成的任务
 	}
 }
 void CacheThread::process()

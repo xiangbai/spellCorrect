@@ -11,12 +11,12 @@
 #include "CacheQuery.h"
 class CacheThread:public Thread {
 public:
-	CacheThread(std::size_t interval);
+	CacheThread();
 	virtual ~CacheThread();
 	void run() ; //继承线程的函数
 private:
 	void process();
-	std::size_t _interval ;
+
 };
 
 #endif /* CACHETHREAD_H_ */
